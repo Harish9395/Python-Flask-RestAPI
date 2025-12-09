@@ -20,7 +20,7 @@
       "environment": [
         {
           "name": "CONFIG_URL",
-          "value": "http://localhost:2772/applications/my-app/environments/dev/configurations/runtime-config/latest",
+          "value": "http://localhost:2772/applications/Test-app/environments/Dev/configurations/runtime-config/latest",
           "name": "env",
           "value": "dev"
         }
