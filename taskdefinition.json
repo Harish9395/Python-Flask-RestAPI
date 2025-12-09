@@ -5,6 +5,7 @@
   "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
   "executionRoleArn": "arn:aws:iam::482387069884:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::482387069884:role/ecsTaskRole",
   "containerDefinitions": [
     {
       "name": "python-flask-app",
@@ -13,15 +14,18 @@
       "portMappings": [
         {
           "containerPort": 5000,
-          "hostPort": 5000,
           "protocol": "tcp"
+        }
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "appconfig-shared",
+          "containerPath": "/config"
         }
       ],
       "environment": [
         {
-          "name": "CONFIG_URL",
-          "value": "http://localhost:2772/applications/my-app/environments/dev/configurations/runtime-config/latest",
-          "name": "env",
+          "name": "ENV",
           "value": "dev"
         }
       ]
@@ -33,18 +37,29 @@
       "memory": 128,
       "cpu": 128,
       "environment": [
-        { "name": "APPCONFIG_APPLICATION", "value": "my-app" },
+        { "name": "APPCONFIG_APPLICATION", "value": "Test-app" },
         { "name": "APPCONFIG_ENVIRONMENT", "value": "dev" },
-        { "name": "APPCONFIG_CONFIGURATION", "value": "runtime-config" },
+        { "name": "APPCONFIG_CONFIGURATION", "value": "ecs-task-resources" },
         { "name": "APPCONFIG_POLL_INTERVAL_SECONDS", "value": "5" },
         { "name": "AWS_REGION", "value": "us-east-2" }
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "appconfig-shared",
+          "containerPath": "/config"
+        }
       ],
       "portMappings": [
         {
           "containerPort": 2772,
-          "hostPort": 2772
+          "protocol": "tcp"
         }
       ]
+    }
+  ],
+  "volumes": [
+    {
+      "name": "appconfig-shared"
     }
   ]
 }
