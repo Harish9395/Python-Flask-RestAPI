@@ -28,7 +28,7 @@ appService = AppService()
 
 @app.route('/')
 def home():
-    return "App Works!!!"
+    return "App Works!!"
 
 @app.route('/env')
 def env():
