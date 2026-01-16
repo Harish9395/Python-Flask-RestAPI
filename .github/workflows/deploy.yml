@@ -110,7 +110,7 @@ jobs:
           apiKey: ${{ secrets.BLAZEMETER_API_KEY }}
           apiSecret: ${{ secrets.BLAZEMETER_API_SECRET }}
           createTest: "true"
-          inputStartFile: "performance.yml" # Path to your Taurus YAML file
+          inputStartFile: "performance.yaml" # Path to your Taurus YAML file
           testName: "My GitHub Actions Test"
           projectID: "2583642" # Replace with your BlazeMeter Project ID
           continuePipeline: "false" # "false" makes the pipeline wait for test completion
