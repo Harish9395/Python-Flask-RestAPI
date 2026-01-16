@@ -11,6 +11,11 @@ scenarios:
       - url: http://3.134.95.55:5000/   # <-- replace with your .NET page URL
         method: GET
 
+modules:
+  cloud:
+    username: ${BLAZEMETER_USERNAME}
+    token: ${BLAZEMETER_API_KEY}
+
 reporting:
   - module: blazemeter
 
