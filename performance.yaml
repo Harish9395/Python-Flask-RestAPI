@@ -12,11 +12,6 @@ scenarios:
       - url: http://3.134.95.55:5000/   # <-- replace with your .NET page URL
         method: GET
 
-modules:
-  cloud:
-    username: harish99c@gmail.com
-    token: cc3f6fca6fd54e7f86d94c70
-
 reporting:
   - module: blazemeter
 
