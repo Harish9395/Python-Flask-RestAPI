@@ -1,0 +1,13 @@
+ # NEW: BlazeMeter Taurus Performance Test
+  Taurus-Performance-Test:
+    name: BlazeMeter Taurus Performance
+    needs: CI-CD  # Run after CI/CD completes
+    uses: ./.github/workflows/taurus-reusable.yml  # Path to your reusable workflow
+    with:
+      taurus_config: "performance.yaml"  # Path to Taurus YAML
+      language: "dotnet"                              # Match your app language/runtime
+      environment: "dev"                              # Environment name
+      test_id: ""                                     # Optional existing BlazeMeter Test ID
+    secrets:
+      BLAZEMETER_API_KEY: ${{ secrets.BLAZEMETER_API_KEY }}
+      BLAZEMETER_API_SECRET: ${{ secrets.BLAZEMETER_API_SECRET }}
