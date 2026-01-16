@@ -115,4 +115,4 @@ jobs:
           BLAZEMETER_API_KEY: ${{ secrets.BLAZEMETER_API_KEY }}
           BLAZEMETER_API_SECRET: ${{ secrets.BLAZEMETER_API_SECRET }}
         run: |
-          bzt performance.yaml -o modules.cloud.username=$BLAZEMETER_USERNAME -o modules.cloud.token=$BLAZEMETER_API_KEY -o execution.executor=blazemeter
+          bzt performance.yaml -o modules.cloud.username=$BLAZEMETER_USERNAME -o modules.cloud.token=$BLAZEMETER_API_KEY
