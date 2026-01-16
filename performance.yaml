@@ -15,7 +15,7 @@ scenarios:
 modules:
   cloud:
     username: ${BLAZEMETER_USERNAME}
-    token: ${BLAZEMETER_API_KEY}
+    token: ${BLAZEMETER_API_SECRET}
 
 reporting:
   - module: blazemeter
