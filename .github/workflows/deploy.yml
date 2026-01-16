@@ -98,4 +98,21 @@ jobs:
           task-definition: ${{ steps.render-task-def.outputs.task-definition }}
           cluster: ${{ env.ECS_CLUSTER }}
           service: ${{ env.ECS_SERVICE }}
-          wait-for-service-stability: true
+          wait-for-service-stability: true 
+          
+      # Perfomace test using blazemeter
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Taurus
+        run: |
+          sudo apt update
+          sudo apt install -y python3-pip
+          pip3 install bzt
+
+      - name: Run Performance Test on BlazeMeter
+        env:
+          BLAZEMETER_API_KEY: ${{ secrets.BLAZEMETER_API_KEY }}
+          BLAZEMETER_API_SECRET: ${{ secrets.BLAZEMETER_API_SECRET }}
+        run: |
+          bzt performance.yaml
