@@ -121,7 +121,7 @@ jobs:
       - name: Run Performance Test on BlazeMeter
         env:
           BLAZEMETER_USERNAME: harish99c@gmail.com
-          BLAZEMETER_API_KEY: 65890d8d20637b68ab315dc0d2ba6960fbf04964432691b3eb25742c03d9abf5a29ecabc
+          BLAZEMETER_API_KEY: cc3f6fca6fd54e7f86d94c70
           #BLAZEMETER_API_SECRET: ${{ secrets.BLAZEMETER_API_SECRET }}
         run: |
           bzt performance.yaml
