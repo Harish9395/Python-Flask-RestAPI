@@ -110,6 +110,14 @@ jobs:
           sudo apt install -y python3-pip
           pip3 install bzt
 
+      - name: Debug Environment
+        run: |
+          echo "Username: $BLAZEMETER_USERNAME"
+          echo "API Key length: ${#BLAZEMETER_API_KEY}"
+        env:
+          BLAZEMETER_USERNAME: ${{ secrets.BLAZEMETER_USERNAME }}
+          BLAZEMETER_API_KEY: ${{ secrets.BLAZEMETER_API_KEY }}
+          
       - name: Run Performance Test on BlazeMeter
         env:
           BLAZEMETER_USERNAME: ${{ secrets.BLAZEMETER_USERNAME }}
