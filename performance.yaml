@@ -15,7 +15,7 @@ scenarios:
 modules:
   cloud:
     username: harish99c@gmail.com
-    token: 65890d8d20637b68ab315dc0d2ba6960fbf04964432691b3eb25742c03d9abf5a29ecabc
+    token: cc3f6fca6fd54e7f86d94c70
 
 reporting:
   - module: blazemeter
