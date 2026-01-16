@@ -112,7 +112,7 @@ jobs:
           createTest: "true"
           inputStartFile: "performance.yml" # Path to your Taurus YAML file
           testName: "My GitHub Actions Test"
-          projectID: "Tests" # Replace with your BlazeMeter Project ID
+          projectID: "2583642" # Replace with your BlazeMeter Project ID
           continuePipeline: "false" # "false" makes the pipeline wait for test completion
           showTailLog: "true"
           
