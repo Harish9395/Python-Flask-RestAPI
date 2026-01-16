@@ -14,8 +14,8 @@ scenarios:
 
 modules:
   cloud:
-    username: harish99c@gmail.com  
-    token: cc3f6fca6fd54e7f86d94c70
+    username: ${BLAZEMETER_USERNAME}
+    token: ${BLAZEMETER_API_KEY}
 
 reporting:
   - module: blazemeter
