@@ -10,11 +10,11 @@ on:
   workflow_dispatch:
  # push:
 env:
-  AWS_REGION: us-east-2                 
-  ECS_CLUSTER: ecs-demo                
-  ECS_SERVICE: my-ecs-service                
-  ECS_TASK_DEFINITION_FILE: taskdefinition.json  # Path in repo to your task def file
-  CONTAINER_NAME: python-flask-app        # Name of the container in the task definition
+  # AWS_REGION: us-east-2                 
+  # ECS_CLUSTER: ecs-demo                
+  # ECS_SERVICE: my-ecs-service                
+  # ECS_TASK_DEFINITION_FILE: taskdefinition.json  # Path in repo to your task def file
+  #CONTAINER_NAME: python-flask-app        # Name of the container in the task definition
   
 permissions:
   id-token: write
@@ -75,30 +75,30 @@ jobs:
          #  docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           
           
-      - name: Configure AWS credentials via OIDC
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::482387069884:role/GithubECSDeployIAMRole
-          aws-region: ${{ secrets.AWS_REGION }}
+      # - name: Configure AWS credentials via OIDC
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     role-to-assume: arn:aws:iam::482387069884:role/GithubECSDeployIAMRole
+      #     aws-region: ${{ secrets.AWS_REGION }}
 
 
-    #Deploy to ECS Dev
-      - name: Get code
-        uses: actions/checkout@v4
-      - name: Render ECS task definition with new image
-        id: render-task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION_FILE }}
-          container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ steps.build-image.outputs.image }} 
-      - name: Deploy to Amazon ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
-        with:
-          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
-          cluster: ${{ env.ECS_CLUSTER }}
-          service: ${{ env.ECS_SERVICE }}
-          wait-for-service-stability: true 
+    # #Deploy to ECS Dev
+    #   - name: Get code
+    #     uses: actions/checkout@v4
+    #   - name: Render ECS task definition with new image
+    #     id: render-task-def
+    #     uses: aws-actions/amazon-ecs-render-task-definition@v1
+    #     with:
+    #       task-definition: ${{ env.ECS_TASK_DEFINITION_FILE }}
+    #       container-name: ${{ env.CONTAINER_NAME }}
+    #       image: ${{ steps.build-image.outputs.image }} 
+    #   - name: Deploy to Amazon ECS
+    #     uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+    #     with:
+    #       task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+    #       cluster: ${{ env.ECS_CLUSTER }}
+    #       service: ${{ env.ECS_SERVICE }}
+    #       wait-for-service-stability: true 
           
       # Perfomace test using blazemeter
       - name: Checkout repository
