@@ -168,7 +168,7 @@ jobs:
             echo "❌ API Gateway not found!"
             exit 1
           fi
-          BASE_URL="https://${API_ID}.execute-api.us-east-1.amazonaws.com/dev"
+          BASE_URL="https://${API_ID}.execute-api.us-east-2.amazonaws.com/dev"
           echo "API_BASE_URL=${BASE_URL}" >> $GITHUB_ENV
           echo "🔗 API Base URL: $BASE_URL"
 
