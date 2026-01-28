@@ -1,6 +1,6 @@
 function fn() {
   // Base URL from environment (set by GitHub Actions or locally)
-  var baseUrl = java.lang.System.getenv('API_BASE_URL') || 'https://<API_ID>.execute-api.us-east-1.amazonaws.com/dev';
+  var baseUrl = java.lang.System.getenv('API_BASE_URL') || 'https://w54l7lppnl.execute-api.us-east-2.amazonaws.com/dev';
 
   // Optional auth token (for secured APIs)
   var authToken = java.lang.System.getenv('AUTH_TOKEN') || null;
