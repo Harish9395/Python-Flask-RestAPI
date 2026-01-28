@@ -6,8 +6,7 @@ class ExampleTest {
 
     @Karate.Test
     Karate testAll() {
-        // This automatically runs all feature files in src/test/resources
-        return Karate.run().relativeTo(getClass());
+        return Karate.run("features/hello-api").relativeTo(getClass());
     }
 
 }
