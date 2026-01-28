@@ -173,6 +173,7 @@ jobs:
 
       # 5️⃣ Run Karate tests
       - name: Run Karate Tests
+        working-directory: karate-api-tests
         env:
           API_BASE_URL: ${{ env.API_BASE_URL }}
           AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}  # optional if API is secured
