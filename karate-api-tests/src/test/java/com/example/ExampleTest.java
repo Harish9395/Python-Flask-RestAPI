@@ -6,7 +6,7 @@ class ExampleTest {
 
     @Karate.Test
     Karate testAll() {
-        return Karate.run("features/hello-api").relativeTo(getClass());
+        return Karate.run("classpath:features/hello-api.feature").relativeTo(getClass());
     }
 
 }
