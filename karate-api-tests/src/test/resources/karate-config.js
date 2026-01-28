@@ -1,15 +1,18 @@
 function fn() {
-  // Base URL from environment (set by GitHub Actions or locally)
-  var baseUrl = java.lang.System.getenv('API_BASE_URL') || 'https://w54l7lppnl.execute-api.us-east-2.amazonaws.com/dev';
+    var env = karate.env; // 'dev', 'qa', etc.
+    karate.log('karate.env system property was:', env);
 
-  // Optional auth token (for secured APIs)
-  var authToken = java.lang.System.getenv('AUTH_TOKEN') || null;
+    var config = {};
 
-  karate.log('🟢 Karate config loaded. Base URL:', baseUrl);
-  if (authToken) karate.log('🔑 Auth token detected');
+    // Base URL from GitHub Actions
+    config.baseUrl = java.lang.System.getenv('API_BASE_URL');
+    if (!config.baseUrl) {
+        karate.log('❌ API_BASE_URL not set!');
+        throw 'API_BASE_URL environment variable is required';
+    }
 
-  return {
-    baseUrl: baseUrl,
-    authToken: authToken
-  };
+    // Optional auth token
+    config.authToken = java.lang.System.getenv('AUTH_TOKEN') || '';
+
+    return config;
 }
