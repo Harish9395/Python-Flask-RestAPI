@@ -192,4 +192,32 @@ jobs:
           API_BASE_URL: ${{ env.API_BASE_URL }}
           AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}  # optional if API is secured
         run: mvn test -Dkarate.env=dev
+
+    # 11️⃣ Open Karate HTML report (for local runs)
+      - name: Open Karate HTML Report
+        if: github.actor != 'dependabot[bot]' # Optional: skip for bots
+        run: |
+          REPORT_PATH="karate-api-tests/target/karate-reports/karate-summary.html"
+          if [ -f "$REPORT_PATH" ]; then
+            echo "🔹 Karate HTML report found: $REPORT_PATH"
+            # Linux
+            if command -v xdg-open &> /dev/null; then
+              xdg-open "$REPORT_PATH"
+            # macOS
+            elif command -v open &> /dev/null; then
+              open "$REPORT_PATH"
+            else
+              echo "⚠️ Cannot automatically open report. Open $REPORT_PATH manually."
+            fi
+          else
+            echo "❌ Karate HTML report not found!"
+
+      # 12️⃣ Upload Karate HTML report as artifact
+      - name: Upload Karate HTML Report
+        if: always()  # Upload even if tests fail
+        uses: actions/upload-artifact@v3
+        with:
+          name: karate-html-report
+          path: karate-api-tests/target/karate-reports/
+      
           
