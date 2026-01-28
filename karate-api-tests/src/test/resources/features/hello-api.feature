@@ -1,11 +1,7 @@
-Feature: Test API Gateway Hello Endpoint
+Feature: Hello API Test
 
-  Background:
-    * url baseUrl
-    * if (authToken) header Authorization = 'Bearer ' + authToken
-
-  Scenario: Call /hello endpoint
-    Given path 'hello'
+  Scenario: Get Hello
+    Given url karate.config.baseUrl + "/hello"
     When method get
     Then status 200
-    And match response == { message: '#string' }
+    And match response == { message: "Hello World" }
