@@ -159,7 +159,7 @@ jobs:
           role-to-assume: arn:aws:iam::482387069884:role/github-karate-tests-role
           aws-region: us-east-2
 
-      # 4️⃣ Get API Gateway URL dynamically
+      # ✅ Dynamically get API URL from API Gateway and export to GitHub env
       - name: Get API Gateway URL
         id: api
         run: |
@@ -172,10 +172,24 @@ jobs:
           echo "API_BASE_URL=${BASE_URL}" >> $GITHUB_ENV
           echo "🔗 API Base URL: $BASE_URL"
 
-      # 5️⃣ Run Karate tests
+      # ✅ Debug: verify API_BASE_URL
+      - name: Debug API_BASE_URL
+        run: echo "API_BASE_URL=$API_BASE_URL"
+        env:
+          API_BASE_URL: ${{ env.API_BASE_URL }}
+
+      # ✅ Set up Java for Karate
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      # ✅ Run Karate tests
       - name: Run Karate Tests
         working-directory: karate-api-tests
         env:
           API_BASE_URL: ${{ env.API_BASE_URL }}
           AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}  # optional if API is secured
         run: mvn test -Dkarate.env=dev
+          
