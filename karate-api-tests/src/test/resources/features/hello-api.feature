@@ -5,4 +5,4 @@ Feature: Hello API Test
     Given url baseUrl + "/hello"
     When method get
     Then status 200
-    And match response == { message: "Hello World" }
+    And match response == { message: "Hello from Karate API" }
