@@ -48,7 +48,6 @@
                 <version>3.2.5</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <karate.options>--plugin allure</karate.options>
                         <allure.results.directory>target/allure-results</allure.results.directory>
                     </systemPropertyVariables>
                 </configuration>
