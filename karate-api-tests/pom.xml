@@ -18,10 +18,19 @@
     <dependencies>
         <dependency>
             <groupId>com.intuit.karate</groupId>
-            <artifactId>karate-junit5</artifactId>
+            <artifactId>karate-core</artifactId>
             <version>${karate.version}</version>
             <scope>test</scope>
         </dependency>
+             
+         !-- (Optional: UI driver if you run browser tests) -->
+        <dependency>
+             <groupId>com.intuit.karate</groupId>
+             <artifactId>karate-driver</artifactId>
+             <version>1.4.1</version>
+             <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
