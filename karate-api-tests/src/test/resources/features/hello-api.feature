@@ -3,6 +3,6 @@ Feature: Hello API Test
   Scenario: Get Hello
     # Remove 'karate.config.' - access 'baseUrl' directly
     Given url baseUrl + "/hello"
-    When method get
+    When method GET
     Then status 200
     And match response == { message: "Hello from Karate API" }
