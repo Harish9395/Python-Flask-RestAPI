@@ -6,8 +6,7 @@ class ExampleTest {
 
     @Karate.Test
     Karate testAll() {
-        return Karate.run("classpath:features/hello-api.feature")
-                     .plugin("allure"); // <-- adds allure reporter
+        return Karate.run("classpath:features/hello-api.feature").relativeTo(getClass());
     }
 
 }
