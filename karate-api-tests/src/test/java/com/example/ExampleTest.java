@@ -5,9 +5,9 @@ import com.intuit.karate.junit5.Karate;
 class ExampleTest {
 
     @Karate.Test
-    Karate runAll() {
-        return Karate.run()
-                     .relativeTo(getClass())
-                     .parallel(5);
+    Karate testAll() {
+        // Use feature path relative to this class
+        return Karate.run("features/hello-api.feature").relativeTo(getClass());
     }
+
 }
