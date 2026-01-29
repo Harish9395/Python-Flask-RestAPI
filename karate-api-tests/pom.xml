@@ -23,7 +23,7 @@
             <scope>test</scope>
         </dependency>
              
-         !-- (Optional: UI driver if you run browser tests) -->
+         <!-- (Optional: UI driver if you run browser tests) -->
         <dependency>
              <groupId>com.intuit.karate</groupId>
              <artifactId>karate-driver</artifactId>
