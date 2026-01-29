@@ -145,112 +145,65 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Set up Java
+     # ----------------------------------
+      # Java + AWS (Karate + Allure)
+      # ----------------------------------
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "17"
 
-      # 3️⃣ Configure AWS credentials using OIDC
-      - name: Configure AWS Credentials
+      - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::482387069884:role/github-karate-tests-role
           aws-region: us-east-2
 
-      # ✅ Dynamically get API URL from API Gateway and export to GitHub env
-      - name: Get API Gateway URL
-        id: api
+      - name: Resolve API Gateway URL
         run: |
-          API_ID=$(aws apigatewayv2 get-apis --query "Items[?Name=='karate-test-api'].ApiId" --output text)
+          API_ID=$(aws apigatewayv2 get-apis \
+            --query "Items[?Name=='karate-test-api'].ApiId" \
+            --output text)
+
           if [ -z "$API_ID" ]; then
-            echo "❌ API Gateway not found!"
+            echo "❌ API Gateway not found"
             exit 1
           fi
-          BASE_URL="https://${API_ID}.execute-api.us-east-2.amazonaws.com/dev"
-          echo "API_BASE_URL=${BASE_URL}" >> $GITHUB_ENV
-          echo "🔗 API Base URL: $BASE_URL"
 
-      # ✅ Debug: verify API_BASE_URL
+          echo "API_BASE_URL=https://${API_ID}.execute-api.us-east-2.amazonaws.com/dev" >> $GITHUB_ENV
+
       - name: Debug API_BASE_URL
         run: echo "API_BASE_URL=$API_BASE_URL"
-        env:
-          API_BASE_URL: ${{ env.API_BASE_URL }}
 
-      # ✅ Set up Java for Karate
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "17"
-
-      # ✅ Run Karate tests
+      # ----------------------------------
+      # Run Karate tests (Allure enabled)
+      # ----------------------------------
       - name: Run Karate Tests
         working-directory: karate-api-tests
         env:
           API_BASE_URL: ${{ env.API_BASE_URL }}
-          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}  # optional if API is secured
-        run: mvn test -Dkarate.env=dev
+          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+        run: mvn clean test -Dkarate.env=dev
 
- # After your build & test steps (e.g., mvn -q -e -Dtest=... test)
-# --- BEGIN: KARATE REPORT HANDLING ---
-
-      - name: Show Karate report path (do not open in CI)
-        shell: bash
-        run: |
-          REPORT_PATH="karate-api-tests/target/karate-reports/karate-summary.html"
-          if [ -f "$REPORT_PATH" ]; then
-            echo "🔹 Karate HTML report found: $REPORT_PATH"
-            echo "ℹ️ You can download this file via the next 'Upload artifact' step."
-          else
-            echo "❌ Karate HTML report not found!"
-            # Don't fail the job just because the report is missing
-            exit 0
-          fi
-
-# Optional: if you still want to support local runs where GUI is available
-      - name: Try to open Karate report locally (safe in CI)
-        shell: bash
-        run: |
-          REPORT_PATH="karate-api-tests/target/karate-reports/karate-summary.html"
-          if [ -f "$REPORT_PATH" ]; then
-              echo "🔹 Karate HTML report found: $REPORT_PATH"
-          # Linux
-          if command -v xdg-open &>/dev/null; then
-              xdg-open "$REPORT_PATH" || true
-          # macOS
-          elif command -v open &>/dev/null; then
-            open "$REPORT_PATH" || true
-          else
-            echo "⚠️ Cannot automatically open report. Open $REPORT_PATH manually."
-          fi
-          else
-          echo "❌ Karate HTML report not found!"
-          fi
-
-    # Optional: print a quick log summary (first lines of HTML)
-      - name: Print Karate summary to logs
+      # ----------------------------------
+      # Upload Allure results
+      # ----------------------------------
+      - name: Upload Allure results
         if: always()
-        shell: bash
-        run: |
-          SUMMARY_HTML="karate-api-tests/target/karate-reports/karate-summary.html"
-          if [ -f "$SUMMARY_HTML" ]; then
-          echo "🔹 Summary path: $SUMMARY_HTML"
-            head -n 30 "$SUMMARY_HTML" || true
-          else
-            echo "ℹ️ Summary HTML not found."
-          fi
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: karate-api-tests/target/allure-results
+          retention-days: 7
 
-        # Recommended: upload the full report as an artifact
+      # ----------------------------------
+      # Upload Karate HTML report (optional)
+      # ----------------------------------
       - name: Upload Karate HTML report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: karate-report
-          path: |
-            karate-api-tests/target/karate-reports/**
-            if-no-files-found: warn
+          name: karate-html-report
+          path: karate-api-tests/target/karate-reports
           retention-days: 7
-
-# --- END: KARATE REPORT HANDLING ---
