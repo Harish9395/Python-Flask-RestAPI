@@ -6,8 +6,8 @@ class ExampleTest {
 
     @Karate.Test
     Karate testAll() {
-        // Use feature path relative to this class
-        return Karate.run("features/hello-api.feature").relativeTo(getClass());
+        // use "classpath:" to look in src/test/resources
+        return Karate.run("classpath:features/hello-api.feature");
     }
 
 }
