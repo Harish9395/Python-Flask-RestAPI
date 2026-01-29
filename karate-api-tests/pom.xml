@@ -15,7 +15,15 @@
         <karate.version>1.4.1</karate.version>
     </properties>
 
-    <dependencies>
+    <dependencies>          
+    <!-- Karate (JUnit 5 helpers) -->
+         <dependency>
+               <groupId>com.intuit.karate</groupId>
+               <artifactId>karate-junit5</artifactId>
+               <version>${karate.version}</version>
+               <scope>test</scope>
+         </dependency>
+
         <dependency>
             <groupId>com.intuit.karate</groupId>
             <artifactId>karate-core</artifactId>
