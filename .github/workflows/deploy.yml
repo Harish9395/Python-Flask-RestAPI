@@ -193,31 +193,64 @@ jobs:
           AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}  # optional if API is secured
         run: mvn test -Dkarate.env=dev
 
-    # 11️⃣ Open Karate HTML report (for local runs)
-      - name: Open Karate HTML Report
-        if: github.actor != 'dependabot[bot]' # Optional: skip for bots
+ # After your build & test steps (e.g., mvn -q -e -Dtest=... test)
+# --- BEGIN: KARATE REPORT HANDLING ---
+
+      - name: Show Karate report path (do not open in CI)
+        shell: bash
         run: |
           REPORT_PATH="karate-api-tests/target/karate-reports/karate-summary.html"
           if [ -f "$REPORT_PATH" ]; then
             echo "🔹 Karate HTML report found: $REPORT_PATH"
-            # Linux
-            if command -v xdg-open &> /dev/null; then
-              xdg-open "$REPORT_PATH"
-            # macOS
-            elif command -v open &> /dev/null; then
-              open "$REPORT_PATH"
-            else
-              echo "⚠️ Cannot automatically open report. Open $REPORT_PATH manually."
-            fi
+            echo "ℹ️ You can download this file via the next 'Upload artifact' step."
           else
             echo "❌ Karate HTML report not found!"
+            # Don't fail the job just because the report is missing
+            exit 0
+          fi
 
-      # 12️⃣ Upload Karate HTML report as artifact
-      - name: Upload Karate HTML Report
-        if: always()  # Upload even if tests fail
+# Optional: if you still want to support local runs where GUI is available
+      - name: Try to open Karate report locally (safe in CI)
+        shell: bash
+        run: |
+          REPORT_PATH="karate-api-tests/target/karate-reports/karate-summary.html"
+          if [ -f "$REPORT_PATH" ]; then
+              echo "🔹 Karate HTML report found: $REPORT_PATH"
+          # Linux
+          if command -v xdg-open &>/dev/null; then
+              xdg-open "$REPORT_PATH" || true
+          # macOS
+          elif command -v open &>/dev/null; then
+            open "$REPORT_PATH" || true
+          else
+            echo "⚠️ Cannot automatically open report. Open $REPORT_PATH manually."
+          fi
+          else
+          echo "❌ Karate HTML report not found!"
+          fi
+
+    # Optional: print a quick log summary (first lines of HTML)
+      - name: Print Karate summary to logs
+        if: always()
+        shell: bash
+        run: |
+          SUMMARY_HTML="karate-api-tests/target/karate-reports/karate-summary.html"
+          if [ -f "$SUMMARY_HTML" ]; then
+          echo "🔹 Summary path: $SUMMARY_HTML"
+            head -n 30 "$SUMMARY_HTML" || true
+          else
+            echo "ℹ️ Summary HTML not found."
+          fi
+
+        # Recommended: upload the full report as an artifact
+      - name: Upload Karate HTML report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: karate-html-report
-          path: karate-api-tests/target/karate-reports/
-      
-          
+          name: karate-report
+          path: |
+            karate-api-tests/target/karate-reports/**
+            if-no-files-found: warn
+          retention-days: 7
+
+# --- END: KARATE REPORT HANDLING ---
