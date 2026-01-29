@@ -6,8 +6,8 @@ class ExampleTest {
 
     @Karate.Test
     Karate testAll() {
-        // use "classpath:" to look in src/test/resources
-        return Karate.run("classpath:features/hello-api.feature");
+        return Karate.run("classpath:features/hello-api.feature")
+                     .plugin("allure"); // <-- adds allure reporter
     }
 
 }
