@@ -1,10 +1,10 @@
 import requests
 
 
-def test_get_tasks():
+def test_get_tasks(base_url):
 
     response = requests.get(
-        "http://127.0.0.1:5000/api/tasks"
+        f"{base_url}/api/tasks"
     )
 
     assert response.status_code == 200
