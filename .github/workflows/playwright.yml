@@ -48,6 +48,7 @@ jobs:
           pytest tests/e2e -v --html=playwright-report.html --self-contained-html
 
       - name: Upload Playwright Report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
