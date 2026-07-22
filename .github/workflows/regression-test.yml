@@ -1,13 +1,16 @@
 name: ECS Regression Testing
 
 on:
-  # Manual execution
   workflow_call:
   workflow_dispatch:
 
-  # Nightly regression run at 2 AM UTC
+  # Nightly regression execution
   # schedule:
   #   - cron: "0 2 * * *"
+
+
+permissions:
+  contents: read
 
 jobs:
   regression-test:
@@ -36,7 +39,7 @@ jobs:
 
       - name: Health Check ECS
         run: |
-          curl --fail $BASE_URL
+          curl --fail --retry 5 --retry-delay 10 $BASE_URL
 
       - name: Run Regression Tests
         run: |
@@ -51,6 +54,7 @@ jobs:
         with:
           name: regression-test-report
           path: regression-report.html
+          if-no-files-found: warn
 
       - name: Upload Screenshots
         if: always()
@@ -58,3 +62,4 @@ jobs:
         with:
           name: regression-screenshots
           path: screenshots/
+          if-no-files-found: warn
