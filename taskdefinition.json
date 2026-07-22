@@ -4,7 +4,7 @@
   "memory": "3072",
   "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
-  "executionRoleArn": "arn:aws:iam::482387069884:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::728327099276:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
       "name": "python-flask-app",
