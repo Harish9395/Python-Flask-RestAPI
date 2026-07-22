@@ -102,7 +102,8 @@ jobs:
   playwright-test:
     needs: build
     uses: ./.github/workflows/playwright.yml
-    secrets: inherit
+    secrets:
+      DEV_URL: ${{ secrets.DEV_URL }}
   regression-test:
     needs: playwright-test
     uses: ./.github/workflows/regression-test.yml
