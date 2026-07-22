@@ -11,7 +11,7 @@ on:
  # push:
 env:
   AWS_REGION: us-east-2                 
-  ECS_CLUSTER: ecs-demo                
+  ECS_CLUSTER: Ecs-demo                
   ECS_SERVICE: my-ecs-service                
   ECS_TASK_DEFINITION_FILE: taskdefinition.json  # Path in repo to your task def file
   CONTAINER_NAME: python-flask-app        # Name of the container in the task definition
