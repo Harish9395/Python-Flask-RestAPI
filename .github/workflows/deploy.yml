@@ -105,5 +105,5 @@ jobs:
     secrets: inherit
   regression-test:
     needs: playwright-test
-    uses: ./.github/workflows/regression.yml
+    uses: ./.github/workflows/regression-test.yml
     secrets: inherit
