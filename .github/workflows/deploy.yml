@@ -103,3 +103,7 @@ jobs:
     needs: build
     uses: ./.github/workflows/playwright.yml
     secrets: inherit
+  regression-test:
+    needs: playwright-test
+    uses: ./.github/workflows/regression.yml
+    secrets: inherit
