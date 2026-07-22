@@ -99,3 +99,7 @@ jobs:
           cluster: ${{ env.ECS_CLUSTER }}
           service: ${{ env.ECS_SERVICE }}
           wait-for-service-stability: true
+  playwright-test:
+    needs: build
+    uses: ./.github/workflows/playwright.yml
+    secrets: inherit
