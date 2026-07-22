@@ -2,6 +2,9 @@ name: ECS Application Testing
 
 on:
   workflow_call:
+    secrets:
+      DEV_URL:
+        required: true
   workflow_dispatch:
 
 jobs:
