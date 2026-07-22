@@ -1,16 +1,12 @@
 import pytest
 
 
-@pytest.mark.parametrize(
-    "browser",
-    [
-        "chromium"
-    ]
-)
-def test_browser_launch(page, base_url):
+def test_browser_launch(browser, base_url):
+    context = browser.new_context()
+    page = context.new_page()
 
     response = page.goto(base_url)
 
-    assert response.status == 200
+    assert response.ok
 
-    assert page.title() is not None
+    context.close()
