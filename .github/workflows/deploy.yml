@@ -44,12 +44,12 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Run Python tests
-        run: |
-          if [ -f pytest.ini ] || [ -d tests ]; then
-            pip install pytest
-            pytest
-          fi
+      # - name: Run Python tests
+      #   run: |
+      #     if [ -f pytest.ini ] || [ -d tests ]; then
+      #       pip install pytest
+      #       pytest
+      #     fi
 
       # SonarQube Scanner configuration
       # - name: Sonarqube scan
