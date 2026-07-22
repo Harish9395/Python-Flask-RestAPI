@@ -1,7 +1,1 @@
 -r requirements.txt
-
-pytest==8.4.1
-pytest-playwright
-playwright
-requests
-pytest-html
