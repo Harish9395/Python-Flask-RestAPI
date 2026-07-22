@@ -2,6 +2,10 @@ name: ECS Regression Testing
 
 on:
   workflow_call:
+    secrets:
+      DEV_URL:
+        required: true
+
   workflow_dispatch:
 
   # Nightly regression execution
@@ -39,6 +43,7 @@ jobs:
 
       - name: Health Check ECS
         run: |
+          echo "Testing URL: $BASE_URL"
           curl --fail --retry 5 --retry-delay 10 $BASE_URL
 
       - name: Run Regression Tests
