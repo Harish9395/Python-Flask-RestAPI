@@ -16,19 +16,19 @@ def pytest_runtest_makereport(item, call):
         item.test_report = report
 
 
-@pytest.fixture
-def page(page, request):
-    yield page
+@pytest.fixture(autouse=True)
+def screenshot_after_test(request, page):
+    yield
 
-    # Screenshot for both passed and failed tests
-    status = "passed" if request.node.test_report.passed else "failed"
+    if hasattr(request.node, "test_report"):
+        status = "passed" if request.node.test_report.passed else "failed"
 
-    screenshot_dir = "screenshots"
-    os.makedirs(screenshot_dir, exist_ok=True)
+        screenshot_dir = "screenshots"
+        os.makedirs(screenshot_dir, exist_ok=True)
 
-    screenshot_path = f"{screenshot_dir}/{request.node.name}_{status}.png"
+        screenshot_path = f"{screenshot_dir}/{request.node.name}_{status}.png"
 
-    page.screenshot(
-        path=screenshot_path,
-        full_page=True
-    )
+        page.screenshot(
+            path=screenshot_path,
+            full_page=True
+        )
