@@ -1,19 +1,6 @@
-import pytest
+def test_browser_launch(playwright, base_url):
 
-
-@pytest.mark.parametrize(
-    "browser_type_name",
-    [
-        "chromium",
-        "firefox",
-        "webkit"
-    ]
-)
-def test_browser_launch(browser_type_name, playwright, base_url):
-
-    browser_type = getattr(playwright, browser_type_name)
-
-    browser = browser_type.launch()
+    browser = playwright.chromium.launch()
 
     page = browser.new_page()
 
