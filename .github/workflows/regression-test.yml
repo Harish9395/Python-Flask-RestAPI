@@ -12,7 +12,6 @@ on:
   # schedule:
   #   - cron: "0 2 * * *"
 
-
 permissions:
   contents: read
 
@@ -37,9 +36,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-test.txt
 
-      - name: Install Playwright browser
+      - name: Install Playwright browsers
         run: |
-          playwright install --with-deps chromium
+          playwright install --with-deps
 
       - name: Health Check ECS
         run: |
@@ -50,6 +49,9 @@ jobs:
         run: |
           pytest tests/regression \
           -v \
+          --browser chromium \
+          --browser firefox \
+          --browser webkit \
           --html=regression-report.html \
           --self-contained-html
 
