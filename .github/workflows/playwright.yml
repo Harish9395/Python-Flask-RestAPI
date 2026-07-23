@@ -5,6 +5,7 @@ on:
     secrets:
       DEV_URL:
         required: true
+
   workflow_dispatch:
 
 jobs:
@@ -28,13 +29,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-test.txt
 
-      - name: Install Playwright browser
+      - name: Install Playwright browsers
         run: |
-          playwright install --with-deps chromium
+          playwright install --with-deps
 
       - name: Health Check ECS
         run: |
-          curl --fail $BASE_URL
+          echo "Testing URL: $BASE_URL"
+          curl --fail --retry 5 --retry-delay 10 $BASE_URL
 
       - name: Run API Tests
         run: |
@@ -42,7 +44,13 @@ jobs:
 
       - name: Run Playwright Smoke Tests
         run: |
-          pytest tests/e2e -v --html=playwright-report.html --self-contained-html
+          pytest tests/e2e \
+          -v \
+          --browser chromium \
+          --browser firefox \
+          --browser webkit \
+          --html=playwright-report.html \
+          --self-contained-html
 
       - name: Upload Playwright Report
         if: always()
@@ -50,10 +58,12 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report.html
+          if-no-files-found: warn
 
-      - name: Upload screenshots
+      - name: Upload Screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-screenshots
           path: screenshots/
+          if-no-files-found: warn
