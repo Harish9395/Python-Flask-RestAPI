@@ -8,42 +8,64 @@ on:
 
   workflow_dispatch:
 
-  # Nightly regression execution
-  # schedule:
-  #   - cron: "0 2 * * *"
 
 permissions:
   contents: read
 
+
 jobs:
+
   regression-test:
+
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+
+    timeout-minutes: 30
 
     env:
       BASE_URL: ${{ secrets.DEV_URL }}
 
+
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v4
+
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install test dependencies
+
+      - name: Install Test Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements-test.txt
 
-      - name: Install Playwright browsers
-        run: |
-          playwright install --with-deps
 
-      - name: Health Check ECS
+      - name: Install Playwright Browsers
         run: |
+          python -m playwright install --with-deps
+
+
+      - name: Display Environment Information
+        run: |
+          python --version
+          pytest --version
+          playwright --version
           echo "Testing URL: $BASE_URL"
-          curl --fail --retry 5 --retry-delay 10 $BASE_URL
+
+
+      - name: ECS Application Health Check
+        run: |
+          curl --fail \
+          --retry 5 \
+          --retry-delay 10 \
+          $BASE_URL
+
 
       - name: Run Regression Tests
         run: |
@@ -53,15 +75,30 @@ jobs:
           --browser firefox \
           --browser webkit \
           --html=regression-report.html \
-          --self-contained-html
+          --self-contained-html \
+          --junitxml=regression-results.xml
 
-      - name: Upload Regression Report
+
+      - name: Publish Regression Test Summary
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Regression Test Results
+          path: regression-results.xml
+          reporter: java-junit
+          fail-on-error: true
+
+
+      - name: Upload Regression Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: regression-test-report
-          path: regression-report.html
+          name: regression-test-reports
+          path: |
+            regression-report.html
+            regression-results.xml
           if-no-files-found: warn
+
 
       - name: Upload Screenshots
         if: always()
@@ -69,4 +106,13 @@ jobs:
         with:
           name: regression-screenshots
           path: screenshots/
+          if-no-files-found: warn
+
+
+      - name: Upload Playwright Traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: test-results/
           if-no-files-found: warn
